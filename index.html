@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Blackjack Trainer – Card Counting & Blackjack App for Android</title>
+    <meta name="description" content="Master blackjack card counting, basic strategy, and deviations with Ultimate Blackjack Trainer. The best free blackjack app for Android. Practice, learn, and win.">
+    <meta name="keywords" content="blackjack app, card counting trainer, blackjack trainer, blackjack strategy, blackjack simulator, learn blackjack, Android blackjack app, casino training, blackjack practice, free blackjack app">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <style>
+        /* --- Design System & Variables --- */
+        :root {
+            --background-dark: #181a20;
+            --background-soft: #232634;
+            --border-color: #2c2f3a;
+            --text-primary: #f4f6fa;
+            --text-secondary: #b0b3c6;
+            --accent-primary: #F0CC6B; /* Vibrant green for casino vibe */
+            --accent-hover: #009e68;
+        }
+
+        /* --- Global Resets & Styles --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 0;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--background-dark);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .logo img {
+            height: 40px;
+            width: auto;
+            vertical-align: middle;
+        }
+        
+        .nav-link {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-hover);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 100px 0;
+            overflow: hidden;
+        }
+
+        .hero-bg-video {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.25;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(24,26,32,0.92) 60%, rgba(24,26,32,0.85) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #F0CC6B, #fffbe6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 2.5rem auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 1rem;
+            color: #232634;
+            background-color: var(--accent-primary);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            position: relative;
+            z-index: 2;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        .cta-button img {
+            height: 24px;
+            margin-right: 12px;
+        }
+
+        /* --- Features Section --- */
+        .features {
+            background-color: var(--background-dark);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+        
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            background-color: var(--background-soft);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .feature-icon {
+            margin-bottom: 20px;
+        }
+
+        .feature-icon svg {
+            width: 48px;
+            height: 48px;
+            color: var(--accent-primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .feature-list {
+            color: var(--text-secondary);
+            margin: 0;
+            padding-left: 1.2em;
+            font-size: 1rem;
+            list-style: disc;
+        }
+        .feature-list li {
+            margin-bottom: 0.5em;
+        }
+
+        /* --- Promo Video Section --- */
+        .promo-video {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .promo-video h2 {
+            color: var(--accent-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .promo-video video {
+            width: 100%;
+            max-width: 700px;
+            display: block;
+            margin: 0 auto 32px auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            background-color: var(--background-soft);
+        }
+        
+        footer p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        footer a {
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        
+        footer a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* --- Responsive Styles --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            section { padding: 60px 0; }
+        }
+
+        .app-logo {
+            height: 44px;
+            width: 44px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            background: #232634;
+            object-fit: cover;
+            border: 2px solid #232634;
+        }
+
+        /* --- FAQ Section --- */
+        .faq {
+            background-color: var(--background-dark);
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+        }
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            margin-bottom: 32px;
+        }
+        .faq-item h3 {
+            font-size: 1.15rem;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+        }
+        .faq-item p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .faq h2 {
+            font-size: 2.2rem;
+            color: var(--accent-primary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            letter-spacing: -1px;
+            position: relative;
+        }
+
+        .faq h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-primary);
+            margin: 18px auto 0 auto;
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+    </style>
+
+    <meta property="og:title" content="Ultimate Blackjack Trainer – Card Counting & Blackjack App for Android">
+    <meta property="og:description" content="Master blackjack card counting, basic strategy, and deviations with Ultimate Blackjack Trainer. The best free blackjack app for Android. Practice, learn, and win.">
+    <meta property="og:image" content="logo.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://icuappdevelopment.github.io/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ultimate Blackjack Trainer – Card Counting & Blackjack App for Android">
+    <meta name="twitter:description" content="Master blackjack card counting, basic strategy, and deviations with Ultimate Blackjack Trainer. The best free blackjack app for Android. Practice, learn, and win.">
+    <meta name="twitter:image" content="logo.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Ultimate Blackjack Trainer",
+      "operatingSystem": "Android",
+      "applicationCategory": "GameApplication",
+      "description": "Master blackjack card counting, basic strategy, and deviations with Ultimate Blackjack Trainer. The best free blackjack app for Android.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "1200"
+      }
+    }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo" style="display:flex;align-items:center;gap:12px;">
+                <img src="logo.png" alt="Ultimate Blackjack Trainer App Logo" class="app-logo">
+                Ultimate Blackjack Trainer
+            </a>
+            <nav style="display:flex;gap:32px;">
+                <a href="https://play.google.com/store/apps/details?id=tech.lausiv.blackjacktrainer" class="nav-link" target="_blank" rel="noopener noreferrer">Download</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container hero-content">
+                <h1>Become a Blackjack Pro—Anywhere, Anytime</h1>
+                <p>Ultimate Blackjack Trainer is your pocket coach for perfecting card counting, basic strategy, deviations, and real-time game play. Whether you’re new to the table or a seasoned player, drill fundamental decisions, track your progress, and conquer live hands.</p>
+                <a href="https://play.google.com/store/apps/details?id=tech.lausiv.blackjacktrainer" class="cta-button" target="_blank" rel="noopener noreferrer">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iIzIzMjYzNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMi41Yy01LjI3IDAtOS41IDQuMjMtOS41IDkuNXM0LjIzIDkuNSA5LjUgOS41IDkuNS00LjIzIDkuNS05LjUtNC4yMy05LjUtOS41LTkuNXptMC0yLjVjNi42MiAwIDEyIDUuMzggMTIgMTJzLTUuMzggMTItMTIgMTItMTItNS4zOC0xMi0xMiA1LjM4LTEyIDEyLTEyem0tMS41IDYuNXY5bDcuNS00LjUtNy41LTQuNXoiLz48L3N2Zz4=" alt="Google Play logo"/>
+                    Get it on Google Play
+                </a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Blackjack App Features for Card Counting & Strategy</h2>
+                    <p>Our training modules are designed to build your skills from the ground up, with tools that cover every aspect of advantage play.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Guided Mode Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <h3>Guided Mode Introductions</h3>
+                        <p>Every training module begins with an illustrated overview. Learn the why and how before you start: from card-value assignments and index thresholds in HiLo counting to decision trees in basic strategy and when to deviate.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Focused Training Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        </div>
+                        <h3>Focused Training Modes</h3>
+                        <ul class="feature-list">
+                            <li><strong>HiLo Counting:</strong> Practice running count, true count, and speed drills.</li>
+                            <li><strong>Basic Strategy:</strong> Drill hard totals, soft hands, and pairs with instant feedback.</li>
+                            <li><strong>Deviation Learning:</strong> Master index plays like insurance and 16 vs. 10.</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Simulator Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        </div>
+                        <h3>Live Blackjack Simulator</h3>
+                        <p>Put it all together in a fully configurable game environment: choose number of decks, hands, penetration thresholds, dealer rules, payouts, insurance options and more. Practice betting, splits, surrender and side-bets—all while the discard tray dynamically fills so you can estimate penetration and calculate true count on the fly.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Privacy Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>Offline, Ad-Free, Privacy-Focused</h3>
+                        <p>No Internet required, no ads, and full control over sound and visual aids. Your data stays on your device.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="promo-video">
+            <div class="container">
+                <h2 style="color:var(--accent-primary);text-align:center;">See Ultimate Blackjack Trainer in Action</h2>
+                <div style="width:100%;max-width:700px;margin:32px auto;">
+                    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.25);">
+                        <iframe src="https://www.youtube.com/embed/ykcxPhKYApk?rel=0&showinfo=0"
+                                title="Ultimate Blackjack Trainer Promo"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                                style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:16px;">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <div class="container">
+                <h2 style="color:var(--accent-primary);text-align:center;">Frequently Asked Questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3>What is Ultimate Blackjack Trainer?</h3>
+                        <p>Ultimate Blackjack Trainer is a free Android app designed to help you master blackjack card counting, basic strategy, and advanced deviations through interactive drills and a live simulator.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Can I learn card counting with this app?</h3>
+                        <p>Yes! The app features guided HiLo counting drills, true count practice, and speed challenges to help you learn and apply card counting techniques.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Is Ultimate Blackjack Trainer suitable for beginners?</h3>
+                        <p>Absolutely. The app includes illustrated introductions and step-by-step modules for both new and experienced players.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Does the app work offline?</h3>
+                        <p>Yes, Ultimate Blackjack Trainer is fully functional offline and does not require an internet connection.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Is my data private?</h3>
+                        <p>Your data stays on your device. The app is ad-free and privacy-focused.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                &copy; 2025 ICU Development |
+                <a href="support.html">Support</a> |
+                <a href="privacy.html">Privacy Policy</a> |
+                Contact: <a href="mailto:icu.app.development@gmail.com">icu.app.development@gmail.com</a>
+            </p>
+        </div>
+    </footer>
+</body></html>
