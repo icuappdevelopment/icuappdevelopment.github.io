@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interval Timer: HIIT &amp; Gym - Custom Workout Timer App</title>
+    <meta name="description" content="Build custom interval workout timers for HIIT, boxing rounds, Tabata, and circuit training. Reusable blocks, big countdown display, sound cues, and QR workout sharing. Free on Android and iOS.">
+    <meta name="keywords" content="interval timer, HIIT timer, workout timer, tabata timer, boxing round timer, circuit training timer, gym timer app, interval training app">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo_workout.png">
+
+    <style>
+        :root {
+            --background-dark: #181a20;
+            --background-soft: #232634;
+            --border-color: #2c2f3a;
+            --text-primary: #f4f6fa;
+            --text-secondary: #b0b3c6;
+            --accent-primary: #4ade80; /* Energetic green for fitness */
+            --accent-hover: #86efac;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 0;
+        }
+
+        section { padding: 80px 0; }
+
+        /* --- Header --- */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--background-dark);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-logo {
+            height: 44px;
+            width: 44px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            background: #232634;
+            object-fit: cover;
+            border: 2px solid #232634;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover { color: var(--accent-hover); }
+
+        /* --- Hero --- */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 100px 0;
+            overflow: hidden;
+            background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(74,222,128,0.12), transparent);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #4ade80, #d9fbe5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .hero-logo {
+            height: 96px;
+            width: 96px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(74,222,128,0.25);
+            margin-bottom: 24px;
+            object-fit: cover;
+        }
+
+        .cta-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 1rem;
+            color: #181a20;
+            background-color: var(--accent-primary);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .cta-button.secondary {
+            background-color: transparent;
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+        }
+
+        .cta-button.secondary:hover {
+            background-color: rgba(74,222,128,0.1);
+        }
+
+        /* --- Features --- */
+        .features {
+            background-color: var(--background-dark);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+        @media (max-width: 900px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+
+        .feature-card {
+            background-color: var(--background-soft);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon { margin-bottom: 20px; }
+
+        .feature-icon svg {
+            width: 48px;
+            height: 48px;
+            color: var(--accent-primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .feature-list {
+            color: var(--text-secondary);
+            margin: 0;
+            padding-left: 1.2em;
+            font-size: 1rem;
+            list-style: disc;
+        }
+        .feature-list li { margin-bottom: 0.5em; }
+
+        /* --- FAQ --- */
+        .faq {
+            background-color: var(--background-dark);
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .faq h2 {
+            font-size: 2.2rem;
+            color: var(--accent-primary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            letter-spacing: -1px;
+        }
+        .faq h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-primary);
+            margin: 18px auto 0 auto;
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item { margin-bottom: 32px; }
+        .faq-item h3 {
+            font-size: 1.15rem;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+        }
+        .faq-item p { color: var(--text-secondary); margin: 0; }
+
+        /* --- Footer --- */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            background-color: var(--background-soft);
+        }
+
+        footer p {
+            margin: 0 0 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover { color: var(--accent-primary); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            section { padding: 60px 0; }
+        }
+    </style>
+
+    <meta property="og:title" content="Interval Timer: HIIT &amp; Gym - Custom Workout Timer App">
+    <meta property="og:description" content="Build custom interval workout timers for HIIT, boxing rounds, Tabata, and circuit training. Reusable blocks, big countdown display, sound cues, and QR workout sharing.">
+    <meta property="og:image" content="logo_workout.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://icuappdevelopment.github.io/workout.html">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Interval Timer: HIIT &amp; Gym - Custom Workout Timer App">
+    <meta name="twitter:description" content="Build custom interval workout timers for HIIT, boxing rounds, Tabata, and circuit training.">
+    <meta name="twitter:image" content="logo_workout.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Interval Timer: HIIT & Gym",
+      "operatingSystem": "Android, iOS",
+      "applicationCategory": "HealthApplication",
+      "description": "Build custom interval workout timers for HIIT, boxing rounds, Tabata, and circuit training. Reusable blocks, big countdown display, sound cues, and QR workout sharing.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="workout.html" class="logo">
+                <img src="logo_workout.png" alt="Interval Timer: HIIT &amp; Gym App Logo" class="app-logo">
+                Interval Timer: HIIT &amp; Gym
+            </a>
+            <nav style="display:flex;gap:32px;">
+                <a href="https://play.google.com/store/apps/details?id=tech.lausiv.workouttimer" class="nav-link" target="_blank" rel="noopener noreferrer">Download</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <img src="logo_workout.png" alt="Interval Timer: HIIT &amp; Gym Logo" class="hero-logo">
+                <h1>Your Workout. Your Intervals. Your Timer.</h1>
+                <p>Build exactly the interval timer your training needs - HIIT sessions, boxing rounds, Tabata, circuits and more. Combine reusable work, rest, and repeat blocks, hit start, and train with a huge countdown you can read from across the gym.</p>
+                <div class="cta-row">
+                    <a href="https://play.google.com/store/apps/details?id=tech.lausiv.workouttimer" class="cta-button" target="_blank" rel="noopener noreferrer">
+                        Get it on Google Play
+                    </a>
+                    <a href="https://apps.apple.com/us/app/ultimate-workout-timer/id6758934241" class="cta-button secondary" target="_blank" rel="noopener noreferrer">
+                        Download on the App Store
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Built for Every Kind of Interval Training</h2>
+                    <p>A flexible block system means one app covers every timer you'll ever need at the gym, in the ring, or at home.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Blocks icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1"></rect><rect x="13" y="3" width="8" height="8" rx="1"></rect><rect x="3" y="13" width="8" height="8" rx="1"></rect><rect x="13" y="13" width="8" height="8" rx="1"></rect></svg>
+                        </div>
+                        <h3>Block-Based Workout Builder</h3>
+                        <p>Compose workouts from reusable blocks: work periods, rest intervals, and repeat groups. Nest and combine them to recreate any protocol - from a simple 30/30 to complex multi-round circuits.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Timer icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M9 2h6"></path></svg>
+                        </div>
+                        <h3>Big Display &amp; Sound Cues</h3>
+                        <p>A large, high-contrast countdown you can read mid-set, with customizable sound cues so you always know when to push and when to rest - no need to look at your phone.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- QR icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><path d="M14 14h3v3h-3z"></path><path d="M21 14v7h-7"></path></svg>
+                        </div>
+                        <h3>Share Workouts via QR Code</h3>
+                        <p>Built a great session? Share it with training partners as a QR code or file - they scan it and get the exact same timer. Perfect for coaches and group classes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Privacy icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>Ad-Free, Offline &amp; Private</h3>
+                        <p>No ads, no tracking, no account. The timer works fully offline and your workout data stays on your device. Save up to 3 workouts free, or unlock unlimited saves with a single one-time purchase.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3>What kinds of workouts can I time?</h3>
+                        <p>Anything interval-based: HIIT, Tabata, boxing and MMA rounds, circuit training, EMOM-style sessions, stretching routines - if it has work and rest periods, you can build it.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Is the app free?</h3>
+                        <p>Yes. The free version includes the full timer and lets you save up to 3 workouts. A one-time premium purchase unlocks unlimited saved workouts and extra features - no subscription.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Does it work offline?</h3>
+                        <p>Yes. The timer works completely offline. Internet is only needed for purchases and restores.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Why does the app ask for camera access?</h3>
+                        <p>Only to scan workout QR codes shared by other users. Camera data is processed on-device and never uploaded.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                &copy; 2026 ICU Development |
+                <a href="support-workout.html">Support</a> |
+                <a href="privacy-workout.html">Privacy Policy</a> |
+                Contact: <a href="mailto:icu.app.development@gmail.com">icu.app.development@gmail.com</a>
+            </p>
+            <p>
+                More apps: <a href="index.html">Ultimate Blackjack Trainer</a> | <a href="luck.html">Luck Architect</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

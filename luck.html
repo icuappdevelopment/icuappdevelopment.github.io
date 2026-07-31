@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luck Architect - Incremental Luck-Building Game for Android</title>
+    <meta name="description" content="Luck Architect is an incremental game where you engineer luck itself. Flip coins, roll dice, draw cards, and spin the wheel across eras. Upgrade blueprints, bend the laws of probability, and collapse reality to grow stronger.">
+    <meta name="keywords" content="Luck Architect, incremental game, idle game, coin flip game, luck game, probability game, Android incremental game, prestige game, clicker game">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo_luck.png">
+
+    <style>
+        :root {
+            --background-dark: #181a20;
+            --background-soft: #232634;
+            --border-color: #2c2f3a;
+            --text-primary: #f4f6fa;
+            --text-secondary: #b0b3c6;
+            --accent-primary: #F0CC6B; /* Gold - fits the coin/luck theme */
+            --accent-secondary: #9b7bff; /* Arcane violet for gradients */
+            --accent-hover: #ffe08a;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--background-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-top: 0;
+        }
+
+        section { padding: 80px 0; }
+
+        /* --- Header --- */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--background-dark);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-logo {
+            height: 44px;
+            width: 44px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+            background: #232634;
+            object-fit: cover;
+            border: 2px solid #232634;
+        }
+
+        .nav-link {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover { color: var(--accent-hover); }
+
+        /* --- Hero --- */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 100px 0;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% -10%, rgba(240,204,107,0.14), transparent),
+                radial-gradient(ellipse 50% 40% at 80% 110%, rgba(155,123,255,0.10), transparent);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #F0CC6B, #fffbe6 60%, #9b7bff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .hero-logo {
+            height: 96px;
+            width: 96px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(240,204,107,0.25);
+            margin-bottom: 24px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 28px;
+            font-size: 1rem;
+            color: #232634;
+            background-color: var(--accent-primary);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+
+        .cta-button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .cta-button img { height: 24px; margin-right: 12px; }
+
+        /* --- Features --- */
+        .features {
+            background-color: var(--background-dark);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-primary);
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+        }
+        @media (max-width: 900px) {
+            .features-grid { grid-template-columns: 1fr; }
+        }
+
+        .feature-card {
+            background-color: var(--background-soft);
+            padding: 32px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon { margin-bottom: 20px; font-size: 2rem; }
+
+        .feature-icon svg {
+            width: 48px;
+            height: 48px;
+            color: var(--accent-primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .feature-list {
+            color: var(--text-secondary);
+            margin: 0;
+            padding-left: 1.2em;
+            font-size: 1rem;
+            list-style: disc;
+        }
+        .feature-list li { margin-bottom: 0.5em; }
+
+        /* --- FAQ --- */
+        .faq {
+            background-color: var(--background-dark);
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+        }
+        .faq h2 {
+            font-size: 2.2rem;
+            color: var(--accent-primary);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            letter-spacing: -1px;
+        }
+        .faq h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-primary);
+            margin: 18px auto 0 auto;
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item { margin-bottom: 32px; }
+        .faq-item h3 {
+            font-size: 1.15rem;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+        }
+        .faq-item p { color: var(--text-secondary); margin: 0; }
+
+        /* --- Footer --- */
+        footer {
+            padding: 40px 0;
+            text-align: center;
+            background-color: var(--background-soft);
+        }
+
+        footer p {
+            margin: 0 0 8px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover { color: var(--accent-primary); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
+            section { padding: 60px 0; }
+        }
+    </style>
+
+    <meta property="og:title" content="Luck Architect - Incremental Luck-Building Game for Android">
+    <meta property="og:description" content="Engineer luck itself. Flip coins, roll dice, draw cards, and spin the wheel across eras. Upgrade blueprints, bend the laws of probability, and collapse reality to grow stronger.">
+    <meta property="og:image" content="logo_luck.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://icuappdevelopment.github.io/luck.html">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Luck Architect - Incremental Luck-Building Game for Android">
+    <meta name="twitter:description" content="Engineer luck itself. Flip coins, roll dice, draw cards, and spin the wheel across eras in this incremental game.">
+    <meta name="twitter:image" content="logo_luck.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Luck Architect",
+      "operatingSystem": "Android",
+      "applicationCategory": "GameApplication",
+      "description": "An incremental game where you engineer luck itself. Flip coins, roll dice, draw cards, and spin the wheel across eras. Upgrade blueprints, bend the laws of probability, and collapse reality to grow stronger.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="luck.html" class="logo">
+                <img src="logo_luck.png" alt="Luck Architect App Logo" class="app-logo">
+                Luck Architect
+            </a>
+            <nav style="display:flex;gap:32px;">
+                <a href="https://play.google.com/store/apps/details?id=tech.lausiv.luckarchitect" class="nav-link" target="_blank" rel="noopener noreferrer">Download</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <img src="logo_luck.png" alt="Luck Architect Logo" class="hero-logo">
+                <h1>Become the Architect of Luck</h1>
+                <p>Luck isn't random - it's engineered. Flip coins, roll dice, draw cards, and spin the wheel as you climb through the eras of fortune. Upgrade your blueprints, rewrite the laws of probability, and when reality can't hold your luck anymore... collapse it and build back stronger.</p>
+                <a href="https://play.google.com/store/apps/details?id=tech.lausiv.luckarchitect" class="cta-button" target="_blank" rel="noopener noreferrer">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iIzIzMjYzNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMTIgMi41Yy01LjI3IDAtOS41IDQuMjMtOS41IDkuNXM0LjIzIDkuNSA5LjUgOS41IDkuNS00LjIzIDkuNS05LjUtNC4yMy05LjUtOS41LTkuNXptMC0yLjVjNi42MiAwIDEyIDUuMzggMTIgMTJzLTUuMzggMTItMTIgMTItMTItNS4zOC0xMi0xMiA1LjM4LTEyIDEyLTEyem0tMS41IDYuNXY5bDcuNS00LjUtNy41LTQuNXoiLz48L3N2Zz4=" alt="Google Play logo"/>
+                    Get it on Google Play
+                </a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>An Incremental Game About Engineering Fortune</h2>
+                    <p>Four luck machines, deep upgrade trees, and a prestige system that turns every collapse into a fresh burst of power.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Eras icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                        </div>
+                        <h3>Four Eras of Luck</h3>
+                        <ul class="feature-list">
+                            <li><strong>Coin:</strong> Master the flip - streaks, crits, and overflips.</li>
+                            <li><strong>Dice:</strong> Chase combos and streak multipliers.</li>
+                            <li><strong>Deck:</strong> Deal piles of cards and stack their effects.</li>
+                            <li><strong>Spinner:</strong> Spin a wheel you slowly rig in your favor.</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Blueprint icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="M3 9h6"></path><path d="M3 15h6"></path><path d="M14 8h4"></path><path d="M14 12h4"></path><path d="M14 16h4"></path></svg>
+                        </div>
+                        <h3>Blueprint Upgrade Trees</h3>
+                        <p>Every era has its own blueprint - a sprawling node tree where each purchase visibly changes how your luck machine behaves. Unlock new mechanics, boost payouts, and watch the numbers explode.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Laws icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"></path><path d="M9 12l2 2 4-4"></path></svg>
+                        </div>
+                        <h3>Laws, Collapse &amp; Prestige</h3>
+                        <p>When your luck outgrows reality, collapse it in a full-screen cinematic and enact permanent Laws - powerful rules that persist across runs and let you push further with every reset.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <!-- Fair play icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <h3>Plays Offline, No Forced Ads</h3>
+                        <p>The game runs fully offline and your progress is saved on your device. Ads are strictly optional rewarded bonuses - you only ever watch one if you choose to. A welcome-back bonus greets you when you return.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq">
+            <div class="container">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <h3>What is Luck Architect?</h3>
+                        <p>Luck Architect is a free incremental game for Android where you engineer luck itself - flipping coins, rolling dice, drawing cards, and spinning wheels while upgrading blueprint trees and prestiging through reality collapses.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Is Luck Architect free?</h3>
+                        <p>Yes. The game is free to play. There are optional one-time purchases and optional rewarded ads, but no forced or interstitial ads.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Does it work offline?</h3>
+                        <p>Yes. The game plays fully offline. An internet connection is only needed if you choose to watch a rewarded ad or make a purchase.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Is it gambling?</h3>
+                        <p>No. Luck Architect is a game about probability mechanics - there is no real-money wagering and nothing to win or lose outside the game.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>
+                &copy; 2026 ICU Development |
+                <a href="support-luck.html">Support</a> |
+                <a href="privacy-luck.html">Privacy Policy</a> |
+                Contact: <a href="mailto:icu.app.development@gmail.com">icu.app.development@gmail.com</a>
+            </p>
+            <p>
+                More apps: <a href="index.html">Ultimate Blackjack Trainer</a> | <a href="workout.html">Interval Timer: HIIT &amp; Gym</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
